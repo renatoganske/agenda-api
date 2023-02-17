@@ -18,7 +18,7 @@ public class AgendaApiApplication {
 			contato.setNome("Fulano");
 			contato.setEmail("email@email.com");
 			contato.setFavorito(false);
-			repository.save(contato);
+
 		};
 	}
 
