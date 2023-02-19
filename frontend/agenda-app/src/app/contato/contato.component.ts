@@ -21,9 +21,26 @@ export class ContatoComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.montarFormulário();
+    this.listarContatos();
+  }
+
+  montarFormulário() {
     this.formulario = this.fb.group({
       nome: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]]
+    })
+  }
+
+  listarContatos() {
+    this.service.list().subscribe(response => {
+      this.contatos = response;
+    })
+  }
+
+  favoritar(contato: Contato){
+    this.service.favorite(contato).subscribe(response => {
+      contato.favorito = !contato.favorito;
     })
   }
 
