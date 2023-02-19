@@ -13,7 +13,7 @@ export class ContatoComponent implements OnInit {
 
   formulario: FormGroup;
   contatos: Contato[] = [];
-  colunas = ['id', 'nome', 'email', 'favorito']
+  colunas = [ 'foto', 'id', 'nome', 'email', 'favorito']
 
   constructor(
     private service: ContatoService,
@@ -38,17 +38,30 @@ export class ContatoComponent implements OnInit {
     })
   }
 
-  favoritar(contato: Contato){
+  favoritar(contato: Contato) {
     this.service.favorite(contato).subscribe(response => {
       contato.favorito = !contato.favorito;
     })
+  }
+
+  uploadFoto(event, contato) {
+    const files = event.target.files;
+    if(files){
+      const foto = files[0];
+      const formData: FormData = new FormData();
+      formData.append("foto", foto);
+      this.service
+          .upload(contato, formData)
+          .subscribe(response => this.listarContatos());
+    }
+
   }
 
   submit() {
     const formValues = this.formulario.value;
     const contato: Contato = new Contato(formValues.nome, formValues.email);
     this.service.save(contato).subscribe(resposta => {
-      let lista: Contato [] = [ ... this.contatos, resposta ]
+      let lista: Contato[] = [... this.contatos, resposta]
       this.contatos = lista;
     })
   }
